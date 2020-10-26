@@ -84,8 +84,9 @@ document.addEventListener("keyup", (event) => {
 
 // DIFFICULTY LEVEL
 // DIFFICULTY LEVEL 1
+let numLives = 3;
 let interval = 1500;
-let difficulty = 1;
+let difficulty = 3;
 let numEnemies = 75;
 let enemiesForce = 0.001;
 // HIGHER DIFFICULTIES
@@ -139,11 +140,18 @@ isOffScreen();
 // COLLISION DETECTION
 Events.on(engine, "collisionEnd", ({ pairs }) => {
   pairs.forEach(({ bodyA, bodyB }) => {
-    if (bodyA.id === 1 || bodyB.id === 1 || bodyA.id === 2 || bodyB.id === 2) {
-      console.log(`just hit the wall`);
-    } else {
+    if (bodyA.id === 3 || bodyB.id === 3) {
+      numLives--;
+      World.remove(world, bodyB);
+      Body.setPosition(playerBody, { x: sizeW / 2, y: sizeH - 80 });
+      Body.setVelocity(playerBody, { x: 0, y: 0 });
+      console.log(`numLives is ${numLives}`);
+      console.log(`scoreCount is ${scoreCount}`);
+    } else if (bodyA.id > 3 || bodyB.id > 3) {
       World.remove(world, bodyA);
       World.remove(world, bodyB);
+      scoreCount += 5;
+      console.log(`scoreCount is ${scoreCount}`);
     }
   });
 });
