@@ -38,10 +38,10 @@ let playArea = () => {
 
 // WALLS
 const walls = [
-  Bodies.rectangle(-95, sizeH / 2, 200, sizeH * 2, {
+  Bodies.rectangle(-255, sizeH / 2, 500, sizeH * 2, {
     isStatic: true,
   }),
-  Bodies.rectangle(sizeW + 95, sizeH / 2, 200, sizeH * 2, {
+  Bodies.rectangle(sizeW + 250, sizeH / 2, 500, sizeH * 2, {
     isStatic: true,
   }),
 ];
@@ -137,10 +137,11 @@ const isOffScreen = function () {
   }, 1000);
 };
 isOffScreen();
+
 // COLLISION DETECTION
 Events.on(engine, "collisionEnd", ({ pairs }) => {
   pairs.forEach(({ bodyA, bodyB }) => {
-    if (bodyA.id === 3 || bodyB.id === 3) {
+    if ((bodyA.id === 3 && bodyB.id > 3) || (bodyA.id > 3 && bodyB.id === 3)) {
       numLives--;
       World.remove(world, bodyB);
       Body.setPosition(playerBody, { x: sizeW / 2, y: sizeH - 80 });
@@ -155,6 +156,3 @@ Events.on(engine, "collisionEnd", ({ pairs }) => {
     }
   });
 });
-
-// RESET POSITION AFTER COLLISION
-// Body.setPosition(playerBody, { x: playerBody.position.x, y: sizeH - 80 });
