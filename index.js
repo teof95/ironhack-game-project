@@ -16,10 +16,13 @@ Render.run(render);
 Runner.run(Runner.create(), engine);
 let sizeW = render.options.width;
 let sizeH = render.options.height;
+let playArea = () => {
+  return sizeW / 10 + Math.random() * ((sizeW / 10) * 9);
+};
 
 // WALLS
 const walls = [
-  Bodies.rectangle(0, sizeH / 2, 50, sizeW * 2, {
+  Bodies.rectangle(0, sizeH / 2, 50, sizeH * 2, {
     isStatic: true,
   }),
   Bodies.rectangle(sizeW, sizeH / 2, 50, sizeH * 2, {
@@ -32,7 +35,7 @@ walls.forEach((wall) => {
 World.add(world, walls);
 
 // PLAYER: Create new player and add to environment
-const playerBody = Bodies.circle(sizeW / 2, sizeH - 80, sizeW / 80, {
+const playerBody = Bodies.circle(sizeW / 2, sizeH - 80, sizeW / 60, {
   isStatic: false,
 });
 playerBody.frictionAir = 0;
@@ -43,22 +46,22 @@ console.log(playerBody);
 document.addEventListener("keydown", (event) => {
   const { x, y } = playerBody.velocity;
   if (event.code === "ArrowLeft") {
-    Body.setVelocity(playerBody, { x: x - 12, y: 0 });
+    Body.setVelocity(playerBody, { x: x - sizeW / 100, y: 0 });
     Body.setPosition(playerBody, { x: playerBody.position.x, y: sizeH - 80 });
   } else if (event.code === "ArrowRight") {
-    Body.setVelocity(playerBody, { x: x + 12, y: 0 });
+    Body.setVelocity(playerBody, { x: x + sizeW / 100, y: 0 });
     Body.setPosition(playerBody, { x: playerBody.position.x, y: sizeH - 80 });
   } else if (event.code === "Space") {
     let ammo = Bodies.circle(
       playerBody.position.x,
       playerBody.position.y - 110,
-      4,
+      sizeW / 120,
       {
         isStatic: false,
       }
     );
     ammo.frictionAir = 0;
-    Body.setVelocity(ammo, { x: 0, y: -16 });
+    Body.setVelocity(ammo, { x: 0, y: -(sizeH / 40) });
     World.add(world, ammo);
   }
 });
@@ -69,29 +72,32 @@ document.addEventListener("keyup", (event) => {
 });
 
 // DIFFICULTY LEVEL
-let interval;
+// DIFFICULTY LEVEL 1
+let interval = 1500;
 let difficulty = 1;
-if (difficulty === 1) {
-  interval = 1500;
-  // change endgame at enemies.length = 75?
-}
+let numEnemies = 75;
+let enemiesForce = 0.001;
+// HIGHER DIFFICULTIES
 if (difficulty === 2) {
   interval = 1000;
-  // change endgame at enemies.length = 150?
+  numEnemies = 150;
+  enemiesForce = 0.0015;
 } else if (difficulty === 3) {
-  interval = 800;
-  // change endgame at enemies.length = 250?
+  interval = 750;
+  numEnemies = 300;
+  enemiesForce = 0.002;
 }
 
 // CREATE ENEMIES
 const enemies = [];
-for (let i = 0; i < 100; i++) {
+for (let i = 0; i < numEnemies; i++) {
   enemies.push(
-    Bodies.circle(Math.random() * ((sizeW / 10) * 9), 0, sizeW / 40, {
+    Bodies.circle(playArea(), 0, sizeW / 30, {
       isStatic: false,
     })
   );
 }
+
 // ADD ENEMIES TO WORLD AND LAUNCH ATTACK
 enemies.forEach((enemy, index) => {
   enemy.frictionAir = 0;
@@ -100,7 +106,7 @@ enemies.forEach((enemy, index) => {
     Body.applyForce(
       enemy,
       { x: enemy.position.x, y: enemy.position.y },
-      { x: 0, y: 0.02 }
+      { x: 0, y: (sizeW / 100) * enemiesForce }
     );
   }, index * interval);
 });
