@@ -71,7 +71,7 @@ document.addEventListener("keyup", (event) => {
 // DIFFICULTY LEVEL
 let interval;
 let difficulty = 1;
-if (difficult === 1) {
+if (difficulty === 1) {
   interval = 1500;
   // change endgame at enemies.length = 75?
 }
