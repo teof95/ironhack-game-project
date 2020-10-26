@@ -1,5 +1,14 @@
 // ENVIRONMENT
-const { Engine, Render, Runner, World, Bodies, Body } = Matter;
+const {
+  Engine,
+  Render,
+  Runner,
+  World,
+  Bodies,
+  Body,
+  Detector,
+  Events,
+} = Matter;
 const engine = Engine.create();
 engine.world.gravity.y = 0;
 Body.frictionStatic = 0;
@@ -10,55 +19,57 @@ const render = Render.create({
   options: {
     width: window.innerWidth,
     height: window.innerHeight,
+    showCollisions: true,
+    showBroadphase: true,
+    showPositions: true,
   },
 });
 Render.run(render);
 Runner.run(Runner.create(), engine);
 let sizeW = render.options.width;
 let sizeH = render.options.height;
+let oddEvenCounter = 0;
 let playArea = () => {
-  return sizeW / 10 + Math.random() * ((sizeW / 10) * 9);
+  let rand = Math.random();
+  return oddEvenCounter % 2 === 0
+    ? sizeW / 10 + rand * (sizeW / 2)
+    : sizeW / 2 + rand * (sizeW / 2) - sizeW / 10;
 };
 
 // WALLS
 const walls = [
-  Bodies.rectangle(0, sizeH / 2, 50, sizeH * 2, {
+  Bodies.rectangle(-95, sizeH / 2, 200, sizeH * 2, {
     isStatic: true,
   }),
-  Bodies.rectangle(sizeW, sizeH / 2, 50, sizeH * 2, {
+  Bodies.rectangle(sizeW + 95, sizeH / 2, 200, sizeH * 2, {
     isStatic: true,
   }),
 ];
-walls.forEach((wall) => {
-  wall.density = 1000;
-});
 World.add(world, walls);
 
+// SCORE COUNT
+let scoreCount = 0;
+
 // PLAYER: Create new player and add to environment
-const playerBody = Bodies.circle(sizeW / 2, sizeH - 80, sizeW / 60, {
-  isStatic: false,
-});
+const playerBody = Bodies.circle(sizeW / 2, sizeH - 80, sizeW / 60);
 playerBody.frictionAir = 0;
+playerBody.friction = 0;
 World.add(world, playerBody);
-console.log(playerBody);
+console.log(world.bodies);
 
 // PLAYER MOVEMENT
+let xMove = sizeW / 60;
 document.addEventListener("keydown", (event) => {
   const { x, y } = playerBody.velocity;
   if (event.code === "ArrowLeft") {
-    Body.setVelocity(playerBody, { x: x - sizeW / 100, y: 0 });
-    Body.setPosition(playerBody, { x: playerBody.position.x, y: sizeH - 80 });
+    Body.setVelocity(playerBody, { x: x - xMove, y: 0 });
   } else if (event.code === "ArrowRight") {
-    Body.setVelocity(playerBody, { x: x + sizeW / 100, y: 0 });
-    Body.setPosition(playerBody, { x: playerBody.position.x, y: sizeH - 80 });
+    Body.setVelocity(playerBody, { x: x + xMove, y: 0 });
   } else if (event.code === "Space") {
     let ammo = Bodies.circle(
       playerBody.position.x,
       playerBody.position.y - 110,
-      sizeW / 120,
-      {
-        isStatic: false,
-      }
+      sizeW / 120
     );
     ammo.frictionAir = 0;
     Body.setVelocity(ammo, { x: 0, y: -(sizeH / 40) });
@@ -91,11 +102,8 @@ if (difficulty === 2) {
 // CREATE ENEMIES
 const enemies = [];
 for (let i = 0; i < numEnemies; i++) {
-  enemies.push(
-    Bodies.circle(playArea(), 0, sizeW / 30, {
-      isStatic: false,
-    })
-  );
+  oddEvenCounter++;
+  enemies.push(Bodies.circle(playArea(), 0, sizeW / 30));
 }
 
 // ADD ENEMIES TO WORLD AND LAUNCH ATTACK
@@ -110,3 +118,35 @@ enemies.forEach((enemy, index) => {
     );
   }, index * interval);
 });
+
+// OFF-SCREEN DETECTION & DELETION
+const isOffScreen = function () {
+  let offScreenCheck = setInterval(() => {
+    if (world.bodies.length === 3) {
+      clearInterval(offScreenCheck);
+    }
+    for (i = 3; i < world.bodies.length; i++) {
+      if (world.bodies[i].position.y > sizeH) {
+        World.remove(world, world.bodies[i]);
+        scoreCount -= 5;
+      } else if (world.bodies[i].position.y < -200) {
+        World.remove(world, world.bodies[i]);
+      }
+    }
+  }, 1000);
+};
+isOffScreen();
+// COLLISION DETECTION
+Events.on(engine, "collisionEnd", ({ pairs }) => {
+  pairs.forEach(({ bodyA, bodyB }) => {
+    if (bodyA.id === 1 || bodyB.id === 1 || bodyA.id === 2 || bodyB.id === 2) {
+      console.log(`just hit the wall`);
+    } else {
+      World.remove(world, bodyA);
+      World.remove(world, bodyB);
+    }
+  });
+});
+
+// RESET POSITION AFTER COLLISION
+// Body.setPosition(playerBody, { x: playerBody.position.x, y: sizeH - 80 });
