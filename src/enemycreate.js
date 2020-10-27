@@ -1,19 +1,20 @@
-// WALLS
-const walls = [
-  Bodies.rectangle(-255, sizeH / 2, 500, sizeH * 2, {
-    isStatic: true,
-  }),
-  Bodies.rectangle(sizeW + 250, sizeH / 2, 500, sizeH * 2, {
-    isStatic: true,
-  }),
-];
-World.add(world, walls);
-
-// PLAYER: Create new player and add to environment
-const playerBody = Bodies.circle(sizeW / 2, sizeH - 80, sizeW / 60);
-playerBody.frictionAir = 0;
-playerBody.friction = 0;
-World.add(world, playerBody);
+// DIFFICULTY LEVEL
+// DIFFICULTY LEVEL 1
+let numLives = 3;
+let interval = 1500;
+let difficulty = 1;
+let numEnemies = 75;
+let enemiesForce = 0.001;
+// HIGHER DIFFICULTIES
+if (difficulty === 2) {
+  interval = 1000;
+  numEnemies = 125;
+  enemiesForce = 0.0015;
+} else if (difficulty === 3) {
+  interval = 750;
+  numEnemies = 200;
+  enemiesForce = 0.002;
+}
 
 // CREATE ENEMIES
 const enemies = [];

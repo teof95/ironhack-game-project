@@ -32,3 +32,14 @@ let playArea = () => {
     ? sizeW / 10 + rand * (sizeW / 2)
     : sizeW / 2 + rand * (sizeW / 2) - sizeW / 10;
 };
+
+// WALLS
+const walls = [
+  Bodies.rectangle(-255, sizeH / 2, 500, sizeH * 2, {
+    isStatic: true,
+  }),
+  Bodies.rectangle(sizeW + 250, sizeH / 2, 500, sizeH * 2, {
+    isStatic: true,
+  }),
+];
+World.add(world, walls);

@@ -1,3 +1,9 @@
+// PLAYER: Create new player and add to environment
+const playerBody = Bodies.circle(sizeW / 2, sizeH - 80, sizeW / 60);
+playerBody.frictionAir = 0;
+playerBody.friction = 0;
+World.add(world, playerBody);
+
 // PLAYER MOVEMENT
 let xMove = sizeW / 60;
 document.addEventListener("keydown", (event) => {
