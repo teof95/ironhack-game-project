@@ -1,3 +1,8 @@
+/* COLOR PALLETE
+BLUE: #2d4059
+RED/PINK: #ea5455
+BEIGE: #decdc3
+GREY/WHITE: #e5e5e5 */
 
 canvas {
     background-color:  #2d4059 !important;
@@ -21,18 +26,22 @@ h1 {
 }
 
 .lives {
+    width: 135px !important;
+    height: 60px !important;
     margin-top: 25px !important;
     font-size: 2em !important;
     position: absolute !important;
-    margin-left: 25px;
+    margin-left: 26px;
     pointer-events: none;
 }
 
 .highscore {
+    width: 135px !important;
+    height: 60px !important;
     margin-top: 25px !important;
     font-size: 2em !important;
     position: absolute !important;
-    margin-left: 822px;
+    margin-left: 837px;
     pointer-events: none;
 }
 
