@@ -17,16 +17,14 @@ const isOffScreen = function () {
 isOffScreen();
 
 // COLLISION DETECTION
-Events.on(engine, "collisionEnd", ({ pairs }) => {
+Events.on(engine, "collisionStart", ({ pairs }) => {
   pairs.forEach(({ bodyA, bodyB }) => {
-    if ((bodyA.id === 3 && bodyB.id > 3) || (bodyA.id > 3 && bodyB.id === 3)) {
-      numLives--;
+    if (bodyA.id === 3 && bodyB.id > 3) {
       World.remove(world, bodyB);
       Body.setPosition(playerBody, { x: sizeW / 2, y: sizeH - 80 });
-      Body.setVelocity(playerBody, { x: 0, y: 0 });
-      console.log(`numLives is ${numLives}`);
+      numLives--;
       console.log(`scoreCount is ${scoreCount}`);
-    } else if (bodyA.id > 3 || bodyB.id > 3) {
+    } else if (bodyA.id > 3 && bodyB.id > 3) {
       World.remove(world, bodyA);
       World.remove(world, bodyB);
       scoreCount += 5;
