@@ -1,6 +1,5 @@
 // PLAYER: Create new player and add to environment
 const playerBody = Bodies.circle(sizeW / 2, sizeH - 80, sizeW / 60);
-// console.log(playerBody);
 playerBody.frictionAir = 0;
 playerBody.friction = 0;
 World.add(world, playerBody);

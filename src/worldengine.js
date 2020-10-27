@@ -19,6 +19,7 @@ const render = Render.create({
   options: {
     width: 1000,
     height: 500,
+    wireframes: false,
   },
 });
 Render.run(render);
