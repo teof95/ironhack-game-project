@@ -17,8 +17,8 @@ const render = Render.create({
   element: document.body,
   engine: engine,
   options: {
-    width: window.innerWidth,
-    height: window.innerHeight,
+    width: 1000,
+    height: 500,
   },
 });
 Render.run(render);
@@ -35,7 +35,7 @@ let playArea = () => {
 
 // WALLS
 const walls = [
-  Bodies.rectangle(-255, sizeH / 2, 500, sizeH * 2, {
+  Bodies.rectangle(-250, sizeH / 2, 500, sizeH * 2, {
     isStatic: true,
   }),
   Bodies.rectangle(sizeW + 250, sizeH / 2, 500, sizeH * 2, {

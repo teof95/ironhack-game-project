@@ -1,0 +1,41 @@
+
+canvas {
+    background-color:  #2d4059 !important;
+    width: 1000px !important;
+    height: 450px !important;
+    border: 10px solid #000;
+}
+
+h1 {
+    font-family: 'Revalia', cursive;
+    font-size: 5em !important;
+}
+
+.launch {
+    margin-top: 25px !important;
+    font-size: 2em !important;
+    position: absolute;
+    margin-top: 475px !important;
+    margin-left: 400px !important;
+
+}
+
+.lives {
+    margin-top: 25px !important;
+    font-size: 2em !important;
+    position: absolute !important;
+    margin-left: 25px;
+    pointer-events: none;
+}
+
+.highscore {
+    margin-top: 25px !important;
+    font-size: 2em !important;
+    position: absolute !important;
+    margin-left: 822px;
+    pointer-events: none;
+}
+
+.container {
+    text-align: center;
+}
