@@ -28,6 +28,7 @@ Events.on(engine, "collisionStart", ({ pairs }) => {
       World.remove(world, bodyA);
       World.remove(world, bodyB);
       scoreCount += 5;
+      return scoreCount;
     }
   });
 });
